@@ -79,7 +79,7 @@ document.getElementById("submitBtn3").addEventListener("click", async () => {
   if (!text || text.trim() === "") {
     document.getElementById("load").style.display = "none";
     document.getElementById("events").innerHTML = "No special holidays today.";
-    return; /
+    return; 
   }
 
   const holidays = JSON.parse(text);
