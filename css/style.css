@@ -165,7 +165,6 @@ body {
   border-radius: 15px;
   color: #000000;
 }
-
 .load p {
   font-size: 18px;
   font-weight: 500;
@@ -224,6 +223,5 @@ body {
   border-radius: 15px;
   padding: 20px;
   overflow-y: auto;
-  /* enable vertical scroll */
   overflow-x: hidden;
 }
