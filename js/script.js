@@ -54,6 +54,63 @@ console.log(isoDate)
 
   document.getElementById("load").style.display = "none";
 });
+
+document.getElementById("submitBtn3").addEventListener("click", async () => {
+  document.getElementById("load").style.display = "block";
+
+  const selectedDate = fp.selectedDates[0];
+  if (!selectedDate) return;
+
+  const year = selectedDate.getFullYear();
+  const month = selectedDate.getMonth() + 1;
+  const day = selectedDate.getDate();
+
+  const countryCode = "IN"; 
+
+  try {
+  const res = await fetch(`https://date.nager.at/api/v3/PublicHolidays/${year}/${countryCode}`);
+
+  if (!res.ok) {
+    throw new Error(`HTTP error! status: ${res.status}`);
+  }
+
+  const text = await res.text();
+
+  if (!text || text.trim() === "") {
+    document.getElementById("load").style.display = "none";
+    document.getElementById("events").innerHTML = "No special holidays today.";
+    return; /
+  }
+
+  const holidays = JSON.parse(text);
+
+  document.getElementById("load").style.display = "none";
+  const specialtyDiv = document.getElementById("events");
+  specialtyDiv.innerHTML = "";
+
+  const todayHoliday = holidays.filter(h => {
+    const date = new Date(h.date);
+    return date.getDate() === day && date.getMonth() + 1 === month;
+  });
+
+  if (todayHoliday.length === 0) {
+    specialtyDiv.innerHTML = "No special holidays today.";
+    return;
+  }
+
+  todayHoliday.forEach(h => {
+    const el = document.createElement("p");
+    el.innerHTML = `<strong>${h.localName}</strong> - ${h.name}`;
+    specialtyDiv.appendChild(el);
+  });
+
+} catch (error) {
+  console.error("Error fetching holiday data:", error);
+  document.getElementById("load").style.display = "none";
+  document.getElementById("events").innerHTML = "Error fetching data.";
+}
+});
+
 function down() {
   window.scrollBy(0, 420, { behavior: "smooth" });
 }
